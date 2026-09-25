@@ -290,7 +290,7 @@ nav button.on{color:var(--brass)}nav button.on svg{stroke:var(--brass)}
         <div class="row"><div class="lbl">Progreso general<small>cuánto liberaste de tus líneas</small></div><div class="val num" id="d-pct"></div></div>
         <div class="bar"><i class="green" id="d-progress" style="width:0%"></i></div>
       </div>
-      <p class="note"><b>El plan:</b> mínimo en las 3 y todo el extra a la №1 hasta matarla. Orden: BASA → Sudameris → GNB. Tocá el disponible para actualizarlo con cada resumen.</p>
+      <p class="note"><b>El plan:</b> mínimo en las 3 y todo el extra a la №1 hasta matarla. Ordená las tarjetas de la más chica a la más grande. Tocá el disponible para cambiar nombre, línea y disponible con cada resumen.</p>
     </section>
 
     <!-- METAS -->
@@ -332,12 +332,12 @@ const DOW=["Lu","Ma","Mi","Ju","Vi","Sa","Do"];
 
 const SEED={
   plan:{
-    sueldo:6000000,
-    fijos:[{n:"Terreno",v:1400000},{n:"Inglés",v:334000},{n:"Sajonia",v:115000},{n:"Claude",v:120000},{n:"Netflix",v:60000},{n:"Seguro",v:0}],
-    pagoTarjetas:1500000, ahorroReservado:300000
+    sueldo:0,
+    fijos:[],
+    pagoTarjetas:0, ahorroReservado:0
   },
-  cards:[{n:"BASA",linea:3000000,disp:1218405},{n:"SUDAMERIS",linea:7120000,disp:4043362},{n:"GNB",linea:13000000,disp:800447}],
-  colchon:{meta:3000000,actual:0}, tel:{meta:2500000,aporte:150000,actual:0},
+  cards:[{n:"Tarjeta 1",linea:0,disp:0},{n:"Tarjeta 2",linea:0,disp:0},{n:"Tarjeta 3",linea:0,disp:0}],
+  colchon:{meta:0,actual:0}, tel:{meta:0,aporte:0,actual:0},
   mov:{}
 };
 let S=load();
@@ -572,7 +572,7 @@ $("#btnAddFijo").onclick=()=>openSheet("Nuevo costo fijo","",textF("f-n","Nombre
 function editFijo(i){const f=S.plan.fijos[i];openSheet("Editar "+f.n,"",textF("f-n","Nombre",f.n)+moneyF("f-v","Monto (Gs.)",f.v),()=>{f.n=$("#f-n").value.trim()||f.n;f.v=num("f-v");save();closeSheet();renderPlan();renderResumen();},()=>{S.plan.fijos.splice(i,1);save();renderPlan();renderResumen();});}
 
 /* debt / metas edits */
-function editDisp(i){const c=S.cards[i];openSheet(c.n,"Actualizá el disponible del resumen. La deuda se recalcula.",moneyF("f-d","Disponible (Gs.)",c.disp)+moneyF("f-l","Línea total (Gs.)",c.linea),()=>{c.linea=num("f-l");c.disp=Math.min(num("f-d"),c.linea);save();closeSheet();renderDeuda();});}
+function editDisp(i){const c=S.cards[i];openSheet(c.n,"Actualizá el disponible del resumen. La deuda se recalcula.",textF("f-n","Nombre",c.n)+moneyF("f-d","Disponible (Gs.)",c.disp)+moneyF("f-l","Línea total (Gs.)",c.linea),()=>{c.n=$("#f-n").value.trim()||c.n;c.linea=num("f-l");c.disp=Math.min(num("f-d"),c.linea);save();closeSheet();renderDeuda();});}
 function editMeta(w){if(w==="colchon"){const c=S.colchon;openSheet("Colchón de emergencia","",moneyF("f-m","Meta (Gs.)",c.meta),()=>{c.meta=num("f-m");save();closeSheet();renderMetas();});}
   else{const t=S.tel;openSheet("Fondo teléfono","Meta y aporte mensual",moneyF("f-m","Meta / precio (Gs.)",t.meta)+moneyF("f-a","Aporte mensual (Gs.)",t.aporte),()=>{t.meta=num("f-m");t.aporte=num("f-a");save();closeSheet();renderMetas();});}}
 $("#btnColchon").onclick=()=>openSheet("Sumar al colchón","",moneyF("f-v","Monto (Gs.)",""),()=>{S.colchon.actual+=num("f-v");save();closeSheet();renderMetas();});
